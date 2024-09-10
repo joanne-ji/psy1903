@@ -26,7 +26,15 @@ if need be
 like this!
  */
 
+// Example of a boolean data type
 let correct = false;
 console.log(typeof correct);
 
 console.log(10 < 15); // false
+
+// Try using the prompt method to fetch responses
+let response = prompt('What is 5+3?');
+console.log(response);
+
+response = prompt('What is 5+5?'); // notice that we don't use let when we change the variable
+console.log(response);
