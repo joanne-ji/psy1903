@@ -1,4 +1,4 @@
-# Outside Resources Log - Week X
+# Outside Resources Log - Week 2
 
 ## AI Prompts
 _Record any prompts you put into an AI program this week to help with material in this course. You do not have to include the AI response, just your prompt._
