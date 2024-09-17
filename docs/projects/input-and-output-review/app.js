@@ -12,8 +12,7 @@ let num2 = Math.floor(Math.random() * 10) + 1;
 equation.innerHTML = 'What is ' + num1 + ' + ' + num2 + '?';
 
 num1Output.innerHTML = num1;
-num10inout.innerHTML = nm2;
-
+num10inout.innerHTML = num2;
 
 // Listen for the form to be submitted
 form.addEventListener('submit', function (event) {
