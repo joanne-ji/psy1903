@@ -18,3 +18,5 @@ function convertTemp(temp, convertTo) {
 }
 
 console.log(convertTemp(10, 'c')); // Expected output: -12.222222222222221
+console.log(convertTemp(10, 'f')); // Expected output: 50
+
