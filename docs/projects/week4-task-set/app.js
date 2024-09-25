@@ -50,9 +50,8 @@
 
 // // Question 7
 
-// let results = [];
-
 // function getOddNumbers(numbers) {
+//     let results = [];
 //     for (let number of numbers) {
 //         if (number % 2 !== 0) {
 //             results.push(number);
