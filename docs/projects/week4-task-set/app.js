@@ -63,54 +63,54 @@
 // console.log(getOddNumbers([1, 2, 3, 4, 5])); // Expected output: [1, 3, 5]
 // console.log(getOddNumbers([12, 45, 10, 11, 61])); // Expected output: [45, 11, 61]
 
-// Question 8 - UPDATED
+// // Question 8 - UPDATED
 
-function filterNumbers(numbers, evenOdd) {
-    let results = [];
-    for (let number of numbers) {
-        if ((evenOdd == 'even' && number % 2 == 0) || (evenOdd == 'odd' && number % 2 !== 0)) {
-            results.push(number);
-        }
-    }
-    return results;
+// function filterNumbers(numbers, evenOdd) {
+//     let results = [];
+//     for (let number of numbers) {
+//         if ((evenOdd == 'even' && number % 2 == 0) || (evenOdd == 'odd' && number % 2 !== 0)) {
+//             results.push(number);
+//         }
+//     }
+//     return results;
+// }
+
+// console.log(filterNumbers([1, 2, 3, 4, 5], 'even')); // Expected output: [2, 4]
+// console.log(filterNumbers([1, 2, 3, 4, 5], 'odd')); // Expected output: [1, 3, 5]
+
+// console.log(filterNumbers([45, 10, 11, 61], 'even')); // Expected output: [10]
+// console.log(filterNumbers([45, 10, 11, 61], 'odd')); // Expected output: [45, 11, 61]
+
+// Question 9
+
+alert('Welcome to the even/odd response time task.\n\nYou are about to see a series of numbers.\n\nIf the number you see is EVEN, press the "e" key. If the number you see is ODD, press the "o" key.\n\nPlease answer as quickly and as acurrately as possible.');
+
+let results = [];
+
+for (let i = 0; i < 5; i++) {
+    let randomNumber = getRandomNumber(1, 20);
+    let start = Date.now();
+    let response = prompt(randomNumber);
+    let end = Date.now();
+    let responseTime = (end - start) / 1000;
+    let correct = (response === 'e' && even(randomNumber)) || (response === 'o' && !even(randomNumber));
+    results.push({
+        number: randomNumber,
+        response: response,
+        correct: correct,
+        responseTime: responseTime
+    });
 }
 
-console.log(filterNumbers([1, 2, 3, 4, 5], 'even')); // Expected output: [2, 4]
-console.log(filterNumbers([1, 2, 3, 4, 5], 'odd')); // Expected output: [1, 3, 5]
+alert('Thank you for your time!');
 
-console.log(filterNumbers([45, 10, 11, 61], 'even')); // Expected output: [10]
-console.log(filterNumbers([45, 10, 11, 61], 'odd')); // Expected output: [45, 11, 61]
+console.log(results);
 
-// // Question 9
+function getRandomNumber(min, max) {
+    let randomNumber = Math.floor(Math.random() * max) + min;
+    return randomNumber;
+}
 
-// alert('Welcome to the even/odd response time task.\n\nYou are about to see a series of numbers.\n\nIf the number you see is EVEN, press the "e" key. If the number you see is ODD, press the "o" key.\n\nPlease answer as quickly and as acurrately as possible.');
-
-// let results = [];
-
-// for (let i = 0; i < 5; i++) {
-//     let randomNumber = getRandomNumber(1, 20);
-//     let start = Date.now();
-//     let response = prompt(randomNumber);
-//     let end = Date.now();
-//     let responseTime = (end - start) / 1000;
-//     let correct = (response === 'e' && even(randomNumber)) || (response === 'o' && !even(randomNumber));
-//     results.push({
-//         number: randomNumber,
-//         response: response,
-//         correct: correct,
-//         responseTime: responseTime
-//     });
-// }
-
-// alert('Thank you for your time!');
-
-// console.log(results);
-
-// function getRandomNumber(min, max) {
-//     let randomNumber = Math.floor(Math.random() * max) + min;
-//     return randomNumber;
-// }
-
-// function even(number) {
-//     return number % 2 == 0;
-// }
+function even(number) {
+    return number % 2 == 0;
+}
