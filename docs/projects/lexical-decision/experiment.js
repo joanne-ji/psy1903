@@ -2,7 +2,7 @@ let jsPsych = initJsPsych();
 
 let timeline = [];
 
-// 1. Welcome
+// Welcome
 let welcomeTrial = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: `
@@ -16,8 +16,7 @@ let welcomeTrial = {
 
 timeline.push(welcomeTrial);
 
-// 2. Conditions
-// Shuffle the conditions
+// Conditions
 for (let block of conditions) {
 
     let blockConditions = jsPsych.randomization.repeat(block.conditions, 1);
@@ -60,7 +59,7 @@ for (let block of conditions) {
     }
 }
 
-// 3. Debrief
+// Debrief
 let debriefTrial = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: `
