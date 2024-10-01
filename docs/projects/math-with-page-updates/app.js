@@ -5,8 +5,8 @@ let results = document.getElementById('results');
 let num1Output = document.getElementById('num1');
 let num2Output = document.getElementById('num2');
 
-let num1 = Math.floor(Math.random() * 10) + 1;
-let num2 = Math.floor(Math.random() * 10) + 1;
+let num1 = Math.floor(Math.random() * (10 - 1 + 1)) + 1;
+let num2 = Math.floor(Math.random() * (10 - 1 + 1)) + 1;
 
 let correctAnswer = num1 + num2;
 

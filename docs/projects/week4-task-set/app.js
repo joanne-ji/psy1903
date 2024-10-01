@@ -107,7 +107,7 @@ alert('Thank you for your time!');
 console.log(results);
 
 function getRandomNumber(min, max) {
-    let randomNumber = Math.floor(Math.random() * max) + min;
+    let randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
     return randomNumber;
 }
 

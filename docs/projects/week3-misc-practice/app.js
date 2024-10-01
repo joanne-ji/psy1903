@@ -1,7 +1,7 @@
 // Misc Practice Part A
 
-let randomNumber1 = Math.floor(Math.random() * 10) + 1;
-let randomNumber2 = Math.floor(Math.random() * 10) + 1;
+let randomNumber1 = Math.floor(Math.random() * (10 - 1 + 1)) + 1;
+let randomNumber2 = Math.floor(Math.random() * (10 - 1 + 1)) + 1;
 
 let response = prompt('What is ' + randomNumber1 + '+' + randomNumber2 + '?');
 
