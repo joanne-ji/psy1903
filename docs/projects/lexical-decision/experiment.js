@@ -68,7 +68,7 @@ let resultsTrial = {
         <p>We are saving the results of your inputs.</p>
         `,
     on_start: function () {
-        //  ⭐ Update the following three values as appropriate ⭐
+        // ⭐ Update the following three values as appropriate ⭐
         let prefix = 'lexical-decision';
         let dataPipeExperimentId = 'your-experiment-id-here';
         let forceOSFSave = false;
