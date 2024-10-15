@@ -5,11 +5,20 @@
     padding: 5px 10px;
 }
 
-.name {
-    color: white;
+.list {
+    list-style-type: circle;
+    list-style-position: inside;
+    text-align: left;
     border: 1px solid black;
-    border-radius: 5px;
-    background-color: teal;
-    padding: 10px;
-    font-family: Georgia;
+    border-radius: 15px;
+    padding: 15px 30px;
+    background-color: lightgray
+}
+
+.taskHeading {
+    margin-top: 75px;
+}
+
+.jspsych-display-element input[type=text] {
+    margin-bottom: 75px;
 }
