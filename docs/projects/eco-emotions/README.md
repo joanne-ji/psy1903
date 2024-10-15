@@ -1,8 +1,7 @@
-# Eco=Emotions
+# Eco-Emotions
 
 ## Created by
-Jae Ji
-Nycolly Carvalho
+*Jae Ji and Nycolly Carvalho*
 
 ## Description
 This experiment consists of three tasks:
