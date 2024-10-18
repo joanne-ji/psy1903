@@ -22,3 +22,28 @@
 .jspsych-display-element input[type=text] {
     margin-bottom: 75px;
 }
+
+.stimulusWord {
+    text-align: center;
+    font-size: 48px;
+}
+
+.category1 {
+    font-size: 24px;
+    text-align: left, top;
+    position: absolute;
+    top: 60px;
+    left: 150px;
+}
+
+.category2 {
+    font-size: 24px;
+    position: absolute;
+    top: 60px;
+    right: 150px;
+}
+
+.fixation {
+    font-size: 48px;
+    text-align: center;
+}

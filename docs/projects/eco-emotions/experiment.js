@@ -17,7 +17,6 @@ let welcomeTrial = {
     `,
     choices: [' '],
 };
-
 // timeline.push(welcomeTrial);
 
 // Priming
@@ -42,11 +41,74 @@ let primingTrial = {
         collect: true,
     }
 };
-
-timeline.push(primingTrial);
+// timeline.push(primingTrial);
 
 // IAT
+let iatWelcome = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: `
+        <h1>Task 2 of 3</h1>
+        <p>You will use the <span class='key'>F</span> and <span class='key'>J</span> keys to categorize words into groups as quickly and accurately as you can.</p>
+        <p>There will be 4 parts. The directions will change for each part.</p>
+        <p>Press the <span class='key'>SPACE</span> key to begin.</p>
+        `,
+    choices: [' '],
+};
+timeline.push(iatWelcome);
 
+for (let block of conditions) {
+
+    // Instructions
+    let blockInstructions = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: `
+        <h2>Part ${conditions.indexOf(block) + 1} of 4</h2>
+        <p>In this part, the two categories will be: <b>${block.categories[0]}</b> and <b>${block.categories[1]}</b>.</p>
+        <p>If the word should be categorized into the <b>${block.categories[0]}</b> category, then press <span class='key'>F</span>.</p>
+        <p>If the word should be categorized into the <b>${block.categories[1]}</b> category, then press <span class='key'>J</span>.</p>
+        <p>Press <span class='key'>SPACE</span> to start.</p>
+    `,
+        choices: [' '],
+    };
+    timeline.push(blockInstructions);
+
+    // Trials
+    let blockConditions = jsPsych.randomization.repeat(block.trial, 1);
+
+    for (let condition of blockConditions) {
+        let conditionTrial = {
+            type: jsPsychHtmlKeyboardResponse,
+            stimulus: `
+            <p class='category1'><b>${block.categories[0]}</b> (press 'F')</p>
+            <p class='category2'><b>${block.categories[1]}</b> (press 'J')</p>
+            <p class='stimulusWord'>${condition.word}</p>
+            `,
+            choices: ['f', 'j'],
+            data: {
+                expectedResponse: condition.expectedResponse,
+                expectedCategory: condition.expectedCategory,
+                collect: true,
+            },
+            on_finish: function (data) {
+                if (data.response === data.expectedResponse) {
+                    data.correct = true;
+                } else {
+                    data.correct = false;
+                }
+            }
+        }
+        timeline.push(conditionTrial);
+
+        let fixationTrial = {
+            type: jsPsychHtmlKeyboardResponse,
+            stimulus: `<p class='fixation'>+</p>`,
+            choices: ['NO KEYS'],
+            trial_duration: 250
+        };
+
+        timeline.push(fixationTrial);
+    }
+}
 
 // Questionnaire
 let likert_scale = [
@@ -60,9 +122,9 @@ let likert_scale = [
 let likertSurvey = {
     type: jsPsychSurveyLikert,
     preamble: `
-    <h1 class='taskHeading'>Task 3 of 3</h1> 
-    <p>Please answer the following 10 questions.</p>
-    `,
+<h1 class='taskHeading'>Task 3 of 3</h1>
+<p>Please answer the following 10 questions.</p>
+`,
     button_label: 'Submit',
     questions: [
         { prompt: "Thinking about climate change makes it difficult for me to concentrate.", labels: likert_scale },
@@ -79,5 +141,77 @@ let likertSurvey = {
 };
 
 // timeline.push(likertSurvey);
+
+// Results
+let resultsTrial = {
+    type: jsPsychHtmlKeyboardResponse,
+    choices: ['NO KEYS'],
+    async: false,
+    stimulus: `
+    <h1>Please wait...</h1>
+    <p>We are saving the results of your inputs.</p>
+    `,
+    on_start: function () {
+        // ⭐ Update the following three values as appropriate ⭐
+        let prefix = 'eco-emotions';
+        let dataPipeExperimentId = 'your-experiment-id-here';
+        let forceOSFSave = false;
+
+        // Filter and retrieve results as CSV data
+        let results = jsPsych.data
+            .get()
+            .filter({ collect: true })
+            .csv();
+
+        // Generate a participant ID based on the current timestamp
+        let participantId = new Date().toISOString().replace(/T/, '-').replace(/\..+/, '').replace(/:/g, '-');
+
+        // Dynamically determine if the experiment is currently running locally or on production
+        let isLocalHost = window.location.href.includes('localhost');
+
+        let destination = '/save';
+        if (!isLocalHost || forceOSFSave) {
+            destination = 'https://pipe.jspsych.org/api/data/';
+        }
+
+        // Send the results to our saving end point
+        fetch(destination, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: '*/*',
+            },
+            body: JSON.stringify({
+                experimentID: dataPipeExperimentId,
+                filename: prefix + '-' + participantId + '.csv',
+                data: results,
+            }),
+        }).then(data => {
+            console.log(data);
+            jsPsych.finishTrial();
+        })
+    }
+}
+
+// timeline.push(resultsTrial);
+
+// Debrief
+let debriefTrial = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: `
+    <h1>Thank you for participating!</h1>
+    <p>You can close this tab.</p>
+    `,
+    choices: ['NO KEYS'],
+    on_start: function () {
+        let data = jsPsych.data
+            .get()
+            .filter({ collect: true })
+            .csv();
+        console.log(data);
+    }
+};
+
+timeline.push(debriefTrial);
 
 jsPsych.run(timeline);
