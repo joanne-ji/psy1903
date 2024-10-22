@@ -154,8 +154,8 @@ let resultsTrial = {
     on_start: function () {
         // ⭐ Update the following three values as appropriate ⭐
         let prefix = 'eco-emotions';
-        let dataPipeExperimentId = 'your-experiment-id-here';
-        let forceOSFSave = false;
+        let dataPipeExperimentId = 'R3IeWxvW6LgG';
+        let forceOSFSave = true;
 
         // Filter and retrieve results as CSV data
         let results = jsPsych.data
