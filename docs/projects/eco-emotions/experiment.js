@@ -95,7 +95,6 @@ for (let block of conditions) {
                 expectedCategoryAsDisplayed: condition.expectedCategoryAsDisplayed,
                 leftCategory: block.categories[0],
                 rightCategory: block.categories[1],
-                correct: data.correct,
                 collect: true,
             },
             on_finish: function (data) {
@@ -218,6 +217,7 @@ let debriefTrial = {
     on_start: function () {
         let data = jsPsych.data
             .get()
+            .ignore(['collect', 'stimulus', 'plugin_version'])
             .filter({ collect: true })
             .csv();
         console.log(data);
