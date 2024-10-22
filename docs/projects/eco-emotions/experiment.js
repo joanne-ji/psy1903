@@ -114,7 +114,6 @@ for (let block of conditions) {
             choices: ['NO KEYS'],
             trial_duration: 250
         };
-
         timeline.push(fixationTrial);
     }
 }
@@ -206,7 +205,7 @@ let resultsTrial = {
     }
 }
 
-// timeline.push(resultsTrial);
+timeline.push(resultsTrial);
 
 // Debrief
 let debriefTrial = {
