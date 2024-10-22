@@ -17,7 +17,7 @@ let welcomeTrial = {
     `,
     choices: [' '],
 };
-// timeline.push(welcomeTrial);
+timeline.push(welcomeTrial);
 
 // Priming
 let videos = [
@@ -26,7 +26,9 @@ let videos = [
     { name: 'neutral', embed: `<iframe width="560" height="315" src="https://www.youtube.com/embed/pLVpJAVS27A?si=epz0_j1lHlWfLihe&amp;start=30" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>` },
 ];
 
-let videoCondition = jsPsych.randomization.sampleWithoutReplacement(videos, 1)[0].embed;
+let video = jsPsych.randomization.sampleWithoutReplacement(videos, 1)[0];
+let primeCondition = video.embed;
+let whichPrime = video.name;
 
 let primingTrial = {
     type: jsPsychHtmlKeyboardResponse,
@@ -39,9 +41,11 @@ let primingTrial = {
     choices: ['NO KEYS'],
     data: {
         collect: true,
+        trialType: 'prime',
+        whichPrime: whichPrime
     }
 };
-// timeline.push(primingTrial);
+timeline.push(primingTrial);
 
 // IAT
 let iatWelcome = {
@@ -138,9 +142,12 @@ let likertSurvey = {
         { prompt: "I try to reduce my behaviors that contribute to climate change.", labels: likert_scale },
         { prompt: "I feel guilty if I waste energy.", labels: likert_scale },
     ]
+    data: {
+        collect: true,
+        trialType: 'questionnaire',
+    }
 };
-
-// timeline.push(likertSurvey);
+timeline.push(likertSurvey);
 
 // Results
 let resultsTrial = {
@@ -149,6 +156,7 @@ let resultsTrial = {
     async: false,
     stimulus: `
     <h1>Please wait...</h1>
+    <span class='loader'></span>
     <p>We are saving the results of your inputs.</p>
     `,
     on_start: function () {
