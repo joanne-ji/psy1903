@@ -155,7 +155,7 @@ let resultsTrial = {
         // ⭐ Update the following three values as appropriate ⭐
         let prefix = 'eco-emotions';
         let dataPipeExperimentId = 'R3IeWxvW6LgG';
-        let forceOSFSave = true;
+        let forceOSFSave = false;
 
         // Filter and retrieve results as CSV data
         let results = jsPsych.data
