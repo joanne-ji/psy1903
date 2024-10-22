@@ -18,7 +18,7 @@ let welcomeTrial = {
     `,
     choices: [' '],
 };
-//timeline.push(welcomeTrial);
+timeline.push(welcomeTrial);
 
 // Priming
 let videos = [
@@ -36,11 +36,11 @@ let primingTrial = {
     stimulus: `
     <h1>Task 1 of 3</h1>
     <p class='instructions'>
-        In this task, you will watch the following video. Please press the video to begin.
-        Please do not skip or change the speed; you will not be able to move on if you do so.
+        In this task, you will watch the following video. Please press the video to begin.<br>
+        Please do not skip or change the speed; you will not be able to move on if you do so.<br>
         You will automatically proceed to Task 2 once the video ends.
     </p>
-    ${primeCondition}
+    >${primeCondition}
     `,
     trial_duration: 78000,
     choices: ['NO KEYS'],
@@ -50,7 +50,7 @@ let primingTrial = {
         whichPrime: whichPrime
     }
 };
-timeline.push(primingTrial);
+//timeline.push(primingTrial);
 
 // IAT
 let iatWelcome = {

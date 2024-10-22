@@ -24,11 +24,7 @@
 }
 
 .instructions {
-    border: 1px solid black;
-    border-radius: 15px;
-    padding: 15px 30px;
-    display: inline-block;
-    background-color: lightgray
+    line-height: 1.5;
 }
 
 .stimulusWord {
