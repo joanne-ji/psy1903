@@ -89,8 +89,13 @@ for (let block of conditions) {
             `,
             choices: ['f', 'j'],
             data: {
-                expectedResponse: condition.expectedResponse,
+                trialType: 'iat',
+                word: condition.word,
                 expectedCategory: condition.expectedCategory,
+                expectedCategoryAsDisplayed: condition.expectedCategoryAsDisplayed,
+                leftCategory: block.categories[0],
+                rightCategory: block.categories[1],
+                correct: data.correct,
                 collect: true,
             },
             on_finish: function (data) {
