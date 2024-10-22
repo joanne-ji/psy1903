@@ -35,7 +35,7 @@ let primingTrial = {
     stimulus: `
     <h1>Task 1 of 3</h1>
     <p>In this task, you will watch the following video. Please press the video to begin. You will automatically proceed to Task 2 once the video ends.</p>
-    ${videoCondition}
+    ${primeCondition}
     `,
     trial_duration: 78000,
     choices: ['NO KEYS'],
