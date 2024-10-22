@@ -141,7 +141,7 @@ let likertSurvey = {
         { prompt: "I recycle.", labels: likert_scale },
         { prompt: "I try to reduce my behaviors that contribute to climate change.", labels: likert_scale },
         { prompt: "I feel guilty if I waste energy.", labels: likert_scale },
-    ]
+    ],
     data: {
         collect: true,
         trialType: 'questionnaire',
