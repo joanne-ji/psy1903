@@ -13,17 +13,18 @@ let welcomeTrial = {
       <li>In Task 2, you will categorize a series of words.</li>
       <li>In Task 3, you will answer a brief set of questions.</li>
     </ul>
+    <p>Please use a desktop, not mobile, device to complete this experiment.</p>
     <p>Press the <span class='key'>SPACE</span> key to begin Task 1.</p>
     `,
     choices: [' '],
 };
-timeline.push(welcomeTrial);
+//timeline.push(welcomeTrial);
 
 // Priming
 let videos = [
-    { name: 'climate-anxiety', embed: `<iframe width="560" height="315" src="https://www.youtube.com/embed/QHH3iSeDBLo?si=l2aaso7D6oZiZcHX" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>` },
-    { name: 'school-anxiety', embed: `<iframe width="560" height="315" src="https://www.youtube.com/embed/Okrqwbt-TlI?si=1RgCHdzm45NmiQLc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>` },
-    { name: 'neutral', embed: `<iframe width="560" height="315" src="https://www.youtube.com/embed/pLVpJAVS27A?si=epz0_j1lHlWfLihe&amp;start=30" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>` },
+    { name: 'climate-anxiety', embed: `<iframe width="650" height="400" src="https://www.youtube.com/embed/QHH3iSeDBLo?si=l2aaso7D6oZiZcHX" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>` },
+    { name: 'school-anxiety', embed: `<iframe width="650" height="400" src="https://www.youtube.com/embed/Okrqwbt-TlI?si=1RgCHdzm45NmiQLc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>` },
+    { name: 'neutral', embed: `<iframe width="650" height="400" src="https://www.youtube.com/embed/pLVpJAVS27A?si=epz0_j1lHlWfLihe&amp;start=30" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>` },
 ];
 
 let video = jsPsych.randomization.sampleWithoutReplacement(videos, 1)[0];
@@ -34,7 +35,11 @@ let primingTrial = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: `
     <h1>Task 1 of 3</h1>
-    <p>In this task, you will watch the following video. Please press the video to begin. You will automatically proceed to Task 2 once the video ends.</p>
+    <p class='instructions'>
+        In this task, you will watch the following video. Please press the video to begin.
+        Please do not skip or change the speed; you will not be able to move on if you do so.
+        You will automatically proceed to Task 2 once the video ends.
+    </p>
     ${primeCondition}
     `,
     trial_duration: 78000,
@@ -129,9 +134,9 @@ let likert_scale = [
 let likertSurvey = {
     type: jsPsychSurveyLikert,
     preamble: `
-<h1 class='taskHeading'>Task 3 of 3</h1>
-<p>Please answer the following 10 questions.</p>
-`,
+    <h1 class='taskHeading'>Task 3 of 3</h1>
+    <p>Please answer the following 10 questions.</p>
+    `,
     button_label: 'Submit',
     questions: [
         { prompt: "Thinking about climate change makes it difficult for me to concentrate.", labels: likert_scale },
@@ -203,7 +208,6 @@ let resultsTrial = {
         })
     }
 }
-
 timeline.push(resultsTrial);
 
 // Debrief
@@ -223,7 +227,6 @@ let debriefTrial = {
         console.log(data);
     }
 };
-
 timeline.push(debriefTrial);
 
 jsPsych.run(timeline);
