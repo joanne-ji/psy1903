@@ -34,13 +34,13 @@ let whichPrime = video.name;
 let primingTrial = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: `
-    <h1>Task 1 of 3</h1>
+    <h1 class='taskHeading'>Task 1 of 3</h1>
     <p class='instructions'>
         In this task, you will watch the following video. Please press the video to begin.<br>
         Please do not skip or change the speed; you will not be able to move on if you do so.<br>
         You will automatically proceed to Task 2 once the video ends.
     </p>
-    >${primeCondition}
+    ${primeCondition}
     `,
     trial_duration: 78000,
     choices: ['NO KEYS'],
@@ -50,13 +50,13 @@ let primingTrial = {
         whichPrime: whichPrime
     }
 };
-//timeline.push(primingTrial);
+timeline.push(primingTrial);
 
 // IAT
 let iatWelcome = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: `
-        <h1>Task 2 of 3</h1>
+        <h1 class='taskHeading'>Task 2 of 3</h1>
         <p>You will use the <span class='key'>F</span> and <span class='key'>J</span> keys to categorize words into groups as quickly and accurately as you can.</p>
         <p>There will be 4 parts. The directions will change for each part.</p>
         <p>Press the <span class='key'>SPACE</span> key to begin.</p>
@@ -221,8 +221,8 @@ let debriefTrial = {
     on_start: function () {
         let data = jsPsych.data
             .get()
-            .ignore(['collect', 'stimulus', 'plugin_version'])
             .filter({ collect: true })
+            .ignore(['collect', 'stimulus', 'trial_type', 'plugin_version'])
             .csv();
         console.log(data);
     }
