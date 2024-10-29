@@ -1,4 +1,6 @@
-let jsPsych = initJsPsych();
+let jsPsych = initJsPsych({
+    show_progress_bar: true
+});
 
 let timeline = [];
 
@@ -168,6 +170,7 @@ let resultsTrial = {
         <p>We are saving the results of your inputs.</p>
         `,
     on_start: function () {
+        jsPsych.progressBar.progress = 1;
 
         // Filter and retrieve results as CSV data
         let results = jsPsych.data
