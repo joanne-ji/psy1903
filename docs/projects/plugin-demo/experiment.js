@@ -78,7 +78,6 @@ let resultsTrial = {
         <p>We are saving the results of your inputs.</p>
         `,
     on_start: function () {
-
         // Filter and retrieve results as CSV data
         let results = jsPsych.data
             .get()
