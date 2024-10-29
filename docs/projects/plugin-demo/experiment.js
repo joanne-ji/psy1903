@@ -18,7 +18,7 @@ timeline.push(welcomeTrial);
 let promptDisplay = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: `
-    <p>Please draw the word shown on the next screen and continue adding detail for 40 seconds.</p>
+    <p style='font-size:30px'>Please draw the word shown on the next screen and continue adding detail for 40 seconds.</p>
     `,
     trial_duration: 750,
     choices: [' '],
@@ -33,10 +33,13 @@ let fixation = {
 };
 timeline.push(fixation);
 
+let words = ['apple', 'car', 'flower'];
+let word = jsPsych.randomization.sampleWithoutReplacement(words, 1)[0];
+
 let wordDisplay = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: `
-    <p>apple</p>
+    <p style='font-size:30px'>${word}</p>
     `,
     trial_duration: 750,
     choices: [' '],
@@ -45,9 +48,21 @@ timeline.push(wordDisplay);
 
 let encoding = {
     type: jsPsychSketchpad,
+    prompt_location: 'belowcanvas',
     trial_duration: 40000,
+    show_countdown_trial_duration: true,
 };
-timeline.push(wordDisplay);
+timeline.push(encoding);
+
+let recall = {
+    type: jsPsychSurveyHtmlForm,
+    preamble: `
+    <p style='font-size:30px'>What was the word?</p>
+    `,
+    html: '<p><input type="text" id="test-resp-box" name="answer" size="20" /></p>',
+    autofocus: 'test-resp-box'
+};
+timeline.push(recall);
 
 // Results
 let resultsTrial = {
