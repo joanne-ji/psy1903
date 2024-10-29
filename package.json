@@ -1,7 +1,7 @@
 {
     "name": "psy1903",
     "scripts": {
-        "start": "nodemon --verbose --delay 2 server.js"
+        "start": "nodemon --watch server.js --verbose server.js"
     },
     "dependencies": {
         "express": "^4.19.2",
