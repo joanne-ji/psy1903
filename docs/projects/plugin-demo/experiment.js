@@ -2,6 +2,8 @@ let jsPsych = initJsPsych();
 
 let timeline = [];
 
+let participantId = getCurrentTimestamp();
+
 // Welcome
 let welcomeTrial = {
     type: jsPsychHtmlKeyboardResponse,
@@ -18,7 +20,8 @@ timeline.push(welcomeTrial);
 let promptDisplay = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: `
-    <p style='font-size:30px'>Please draw the word shown on the next screen and continue adding detail for 40 seconds.</p>
+    <p style='font-size:30px'>Please draw the word shown on the next screen,
+    and continue adding detail for 40 seconds.</p>
     `,
     trial_duration: 750,
     choices: [' '],
@@ -86,7 +89,6 @@ let resultsTrial = {
         let prefix = 'plugin-demo';
         let dataPipeExperimentId = 'R3IeWxvW6LgG';
         let forceOSFSave = false;
-        let participantId = getCurrentTimestamp();
         let fileName = prefix + '-' + participantId + '.csv';
 
         saveResults(fileName, results, dataPipeExperimentId, forceOSFSave).then(response => {
@@ -100,18 +102,19 @@ timeline.push(resultsTrial);
 // Debrief
 let debriefTrial = {
     type: jsPsychHtmlKeyboardResponse,
-    stimulus: `
-    <h1>Thank you for participating!</h1>
-    <p>You can close this tab.</p>
-    `,
-    choices: ['NO KEYS'],
-    on_start: function () {
-        let data = jsPsych.data
-            .get()
-            .csv();
-        console.log(data);
-    }
-};
+    stimulus: function (data) {
+        let linkToQualtricsSurvey = `https://harvard.az1.qualtrics.com/jfe/form/SV_3P0ZRwPCLKktZSm?experimentParticipantId=${participantId}`
+
+        return `
+        <h1>Thank you!</h1>
+        <p>
+            To complete your response, 
+            please follow <a href='${linkToQualtricsSurvey}'>this link</a> 
+            and complete the survey you see there.
+        </p>
+    `},
+    choices: ['NO KEYS']
+}
 timeline.push(debriefTrial);
 
 jsPsych.run(timeline);
