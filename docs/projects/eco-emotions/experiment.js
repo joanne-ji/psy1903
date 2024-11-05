@@ -38,14 +38,14 @@ let primingTrial = {
     stimulus: `
     <h1 class='taskHeading'>Task 1 of 3</h1>
     <p class='instructions'>
-        In this task, you will watch the following video. Please press the video to begin.<br>
+        In this task, you will watch the following video. Please click the video to begin.<br>
         Please do not skip or change the speed; you will not be able to move on if you do so.<br>
         You will automatically proceed to Task 2 once the video ends.
     </p>
     ${primeCondition}
     `,
     trial_duration: 78000,
-    choices: ['NO KEYS'],
+    choices: ['z'],
     data: {
         collect: true,
         trialType: 'prime',
@@ -105,11 +105,7 @@ for (let block of conditions) {
                 collect: true,
             },
             on_finish: function (data) {
-                if (data.response === data.expectedResponse) {
-                    data.correct = true;
-                } else {
-                    data.correct = false;
-                }
+                data.correct = data.response == condition.expectedResponse;
             }
         }
         timeline.push(conditionTrial);
