@@ -8,6 +8,12 @@
     background-color: lightgray
 }
 
+.margins {
+    margin-left: 140px;
+    margin-right: 140px;
+    line-height: 40px;
+}
+
 .taskHeading {
     margin-top: 75px;
 }
