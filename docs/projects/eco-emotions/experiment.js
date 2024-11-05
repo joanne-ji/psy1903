@@ -8,7 +8,7 @@ let timeline = [];
 let consent = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: `
-    <p class='margins'>This experiment is an educational exercise about learning to program and analyze a psychological experiment and not a “real” scientific experiment. No identifying information is collected, and data will not be shared beyond our class. If you agree to help out by completing the tasks and questionnaires, please press the <span class='key'>SPACE</span> key to continue. Otherwise, you may close this tab. If you have any questions, please reach out to Dr. Garth Coombs <garthcoombs@fas.harvard.edu>, one of the head instructors of PSY 1903: Programming for Psychological Scientists.</p>
+    <p class='margins'>This experiment is an educational exercise about learning to program and analyze a psychological experiment and not a “real” scientific experiment. No identifying information is collected, and data will not be shared beyond our class. If you agree to help out by completing the tasks and questionnaires, please press the <span class='key'>SPACE</span> key to continue. Otherwise, you may close this tab. If you have any questions, please reach out to Dr. Garth Coombs (garthcoombs@fas.harvard.edu), one of the head instructors of PSY 1903: Programming for Psychological Scientists.</p>
     `,
     choices: [' '],
 };
