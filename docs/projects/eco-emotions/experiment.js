@@ -193,4 +193,32 @@ let resultsTrial = {
         let participantId = getCurrentTimestamp();
         let fileName = prefix + '-' + participantId + '.csv';
 
-        saveResults(fileName, results, da
+        saveResults(fileName, results, dataPipeExperimentId, forceOSFSave).then(response => {
+            jsPsych.finishTrial();
+        })
+
+    }
+}
+timeline.push(resultsTrial);
+
+// Debrief
+let debriefTrial = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: `
+    <h1>Thank you for participating!</h1>
+    <p>You can close this tab.</p>
+    `,
+    choices: ['NO KEYS'],
+    on_start: function () {
+        jsPsych.progressBar.progress = 1;
+        let data = jsPsych.data
+            .get()
+            .filter({ collect: true })
+            .ignore(['collect', 'stimulus', 'trial_type', 'plugin_version'])
+            .csv();
+        console.log(data);
+    }
+};
+timeline.push(debriefTrial);
+
+jsPsych.run(timeline);
