@@ -200,6 +200,7 @@ let debriefTrial = {
     `,
     choices: ['NO KEYS'],
     on_start: function () {
+        jsPsych.progressBar.progress = 1;
         let data = jsPsych.data
             .get()
             .filter({ collect: true })
