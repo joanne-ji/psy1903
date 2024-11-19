@@ -95,7 +95,7 @@ for (file_list in files_list) {
   # Isolate the participant_ID column for the current row number (i) and assign it to be the current participant_ID variable
   dScores[i, "participant_ID"] <- participant_ID
   
-  # Using similar logic, isolate the d_score column for the current row number (i) and assign it to be the current d-score by using our calculate_IAT_dscore on the tmp data file
+  # Isolate the d_score column for the current row number (i) and assign it to be the current d-score by using calculate_IAT_dscore on the tmp data file
   dScores[i, "d_score"] <- calculate_IAT_dscore(tmp)
   
   # Remove the temporary data file tmp
@@ -107,3 +107,28 @@ for (file_list in files_list) {
 
 ## Outside of the for loop, save the new dScores data frame using write.csv() into your data_cleaning/data subdirectory:
 write.csv(dScores,"~/Desktop/psy1903/stats/data_cleaning/data/participant_dScores.csv", row.names = FALSE)
+
+#### Questionnaire Scoring -----------------------------------------------------
+
+## Read in data file to a data frame called iat_test
+iat_test <- read.csv("~/Desktop/psy1903/stats/data_cleaning/data/my-iat-test-data.csv")
+
+## Extract questionnaire data
+json_data <- iat_test[iat_test$trialType == "Questionnaire", "response"]
+
+## Use fromJSON to Convert from JSON to data frame
+questionnaire <- fromJSON(json_data)
+questionnaire <- as.data.frame(questionnaire)
+str(questionnaire)
+
+## Convert to numeric
+questionnaire <- as.data.frame(lapply(questionnaire, as.numeric))
+
+## Reverse score if necessary (not for me but writing code here for learning/future reference)
+# rev_items <- c("question1", "question3", "whatever")
+# for (rev_item in rev_items) {
+  # questionnaire[, rev_item] <- (maxLikertScore + minLikertScale) - questionnaire[, rev_item]
+# }
+
+## Calculate mean or sum score
+score <- rowMeans(questionnaire, na.rm = TRUE)
