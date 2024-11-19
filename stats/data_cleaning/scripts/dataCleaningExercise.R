@@ -32,13 +32,19 @@ for (factorCategory in factorList) {
 str(iat_data2)
 summary(iat_data2)
 
-#### Question 4: Creating a function -------------------------------------------
+#### [USE] Creating a function -------------------------------------------------
+
+# Practice: read in data
+data <- read.csv("~/Desktop/psy1903/osfstorage-archive/eco-emotions-2024-11-05-21-43-21.csv", header = TRUE, na.strings = "NA")
+
+data$rt <- round(as.numeric(data$rt), 0)
 
 # Step 1: Specify your function with one argument, data
 calculate_IAT_dscore <- function(data) {
   
-  # Step 2: Only select trials with rt > 300 & < 5000 (subset full data frame into new data frame called tmp)
+  # Step 2: Only select trials with rt > 300 & < 5000 and filter correct trials (subset full data frame into new data frame called tmp)
   tmp <- data[data$rt > 300 & data$rt < 5000, ]
+  tmp <- tmp[tmp$correct == TRUE, ]
   
   # Step 3: Separate congruent and incongruent trials (subset tmp into two new data frames: congruent_trials and incongruent_trials)
   congruent_trials <- tmp[tmp$expectedCategoryAsDisplayed == "nature or serenity" | tmp$expectedCategoryAsDisplayed == "school or anxiety", ]
@@ -58,7 +64,30 @@ calculate_IAT_dscore <- function(data) {
   return(d_score)
 }
 
-#### Question 5: Putting it in a loop & creating new files ---------------------
+#### [USE] Questionnaire Scoring Function --------------------------------------
+
+## Initiate function called score_questionnaire that accepts a single argument called `data`. Within this function...
+score_questionnaire <- function(data) {
+  
+  ## Extract questionnaire data cell
+  json_data <- data[data$trialType == "questionnaire", "response"]
+  
+  ## Use fromJSON to convert from JSON to data frame
+  questionnaire <- fromJSON(json_data)
+  questionnaire <- as.data.frame(questionnaire)
+  str(questionnaire) # checking my work
+  
+  ## Convert to numeric
+  questionnaire <- as.data.frame(lapply(questionnaire, as.numeric))
+  
+  ## No reverse-scoring because unnecessary
+  
+  ## Calculate & return questionnaire score (mean)
+  score <- rowMeans(questionnaire, na.rm = TRUE)
+  return(score)
+}
+
+#### [USE] Putting it in a loop & creating new files ---------------------------
 
 ## Set a variable called directory_path with the path to the location of your data csv files. This directory should *only* contain your raw participant csv data files and no other files.
 directory_path <- "~/Desktop/psy1903/osfstorage-archive"
@@ -84,6 +113,16 @@ for (file_list in files_list) {
   # Convert 'rt' from character to numeric and round it
   tmp$rt <- round(as.numeric(tmp$rt), 0)
   
+  # Convert "correct" column to logical
+  tmp$correct <- as.logical(tmp$correct)
+  
+  # Converting some columns to factors via another for loop
+  factorList <- c("expectedCategory", "expectedCategoryAsDisplayed", "leftCategory", "rightCategory")
+  
+  for (factorCategory in factorList) {
+    tmp[, factorCategory] <- as.factor(tmp[, factorCategory])
+  }
+  
   # Check for NAs (non-numeric values) and handle them
   if (any(is.na(tmp$rt))) {
     warning(paste("NAs introduced by coercion in participant", tools::file_path_sans_ext(basename(file_list))))
@@ -95,8 +134,14 @@ for (file_list in files_list) {
   # Isolate the participant_ID column for the current row number (i) and assign it to be the current participant_ID variable
   dScores[i, "participant_ID"] <- participant_ID
   
+  # Assign the dScores "whichPrime" column to be the current participant's prime label
+  dScores[i, "whichPrime"] <- tmp[tmp$trialType == "prime", "whichPrime"]
+  
   # Isolate the d_score column for the current row number (i) and assign it to be the current d-score by using calculate_IAT_dscore on the tmp data file
   dScores[i, "d_score"] <- calculate_IAT_dscore(tmp)
+  
+  # Assign the "questionnaire" column to be the output of the score_questionnaire function
+  dScores[i, "questionnaire"] <- score_questionnaire(tmp)
   
   # Remove the temporary data file tmp
   rm(tmp)
@@ -105,10 +150,20 @@ for (file_list in files_list) {
   i <- i + 1
 }
 
+## Change column "whichPrime" to be a factor (should have 2 or 3 levels depending on your prime)
+dScores$whichPrime <- as.factor(dScores$whichPrime)
+
+## Change "d_score" and "questionnaire" to be numbers
+dScores$d_score <- as.numeric(dScores$d_score)
+dScores$questionnaire <- as.numeric(dScores$questionnaire)
+
+## Change "participant_ID" to be characters
+dScores$participant_ID <- as.character(dScores$participant_ID)
+
 ## Outside of the for loop, save the new dScores data frame using write.csv() into your data_cleaning/data subdirectory:
 write.csv(dScores,"~/Desktop/psy1903/stats/data_cleaning/data/participant_dScores.csv", row.names = FALSE)
 
-#### Questionnaire Scoring -----------------------------------------------------
+#### Practice Questionnaire Scoring -----------------------------------------------------
 
 ## Read in data file to a data frame called iat_test
 iat_test <- read.csv("~/Desktop/psy1903/stats/data_cleaning/data/my-iat-test-data.csv")
