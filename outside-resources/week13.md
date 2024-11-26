@@ -3,7 +3,7 @@
 
 ## AI Prompts
 
-- None!
+- "What changes can I make to my customized R theme?"
 
 ## Outside Sites
 

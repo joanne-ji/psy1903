@@ -187,3 +187,82 @@ questionnaire <- as.data.frame(lapply(questionnaire, as.numeric))
 
 ## Calculate mean or sum score
 score <- rowMeans(questionnaire, na.rm = TRUE)
+
+#### [USE] Data visualizations ---------------------------
+
+## ANOVA
+anova <- aov(d_score ~ whichPrime, data = dScores)
+summary(anova)
+
+## T-tests
+TukeyHSD(anova)
+
+## Correlation
+cor.test(dScores$d_score, dScores$questionnaire)         
+
+## Base R histogram
+hist(dScores$d_score,
+     main = "Distribution of D-Scores",
+     xlab = "D-Scores",
+     ylab = "Frequency")
+
+## GGPlot histogram
+# Version 1
+ggplot(dScores, aes(x = d_score)) +
+  geom_histogram(binwidth = 0.1, 
+                 color = "black", 
+                 fill = "skyblue") +
+  labs(title = "Distribution of D-Scores",
+       x = "D-Scores",
+       y = "Frequency") +
+  theme_minimal()
+
+# Version 2
+ggplot(dScores, aes(x = d_score)) +
+  geom_histogram(binwidth = 0.1,
+                 color = "black",
+                 fill = "#9ab67f") +
+  labs(title = "Distribution of D-Scores",
+       x = "D-Scores",
+       y = "Frequency") +
+  green_theme() +
+  facet_wrap(~whichPrime)
+
+## Boxplot
+ggplot(dScores, aes(x = whichPrime, y = d_score, fill = whichPrime)) +
+  geom_boxplot() +
+  labs(title = "Effect of Prime on D-Scores",
+       x = "Prime Condition",
+       y = "D-Scores") +
+  theme_classic() +
+  theme(legend.position = "none") +
+  scale_x_discrete(labels = c("neutral" = "Neutral",
+                              "climate-anxiety" = "Climate Anxiety",
+                              "school-anxiety" = "School Anxiety"))
+
+## Scatterplot
+ggplot(dScores, aes(x = questionnaire, y = d_score)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  labs(title = "Correlation Between Questionnaire and D-Scores",
+       x = "Questionnaire",
+       y = "D-Scores") +
+  theme_classic()
+
+## Create personal theme
+green_theme <- function() {
+  theme_minimal() %+replace%
+  theme(
+    text = element_text(family = "Helvetica"), # font family
+    
+    # Panel borders and background
+    panel.border = element_rect(colour = "#5d7843", fill = NA, linetype = 2),
+    panel.background = element_rect(fill = "#e4ebdd"),
+    
+    # Title and axis label customization
+    plot.title = element_text(size = 14, face = "bold", hjust = 0.5, vjust = 2, family = "Helvetica"),
+    axis.title = element_text(size = 12, family = "Helvetica"),
+    axis.text = element_text(size = 10, family = "Helvetica", color = "#3b4d36"),
+    axis.ticks = element_line(color = "#3b4d36", linewidth = 0.5),
+  )
+}
