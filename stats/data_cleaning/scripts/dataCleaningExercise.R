@@ -95,11 +95,11 @@ directory_path <- "~/Desktop/psy1903/osfstorage-archive"
 ## Create a list of all the files in that directory.
 files_list <- list.files(path = directory_path, pattern = "\\.csv$", full.names = TRUE)
 
-## Create an empty data frame called dScores that has two columns & as many rows as you have data files (e.g., participants)
-dScores <- data.frame(matrix(nrow = length(files_list), ncol = 2))
+## Create an empty data frame called dScores that has 4 columns & as many rows as you have data files (e.g., participants)
+dScores <- data.frame(matrix(nrow = length(files_list), ncol = 4))
 
 ## Rename the default column names to something meaningful
-colnames(dScores) <- c("participant_ID", "d_score")
+colnames(dScores) <- c("participant_ID", "d_score", "whichPrime", "questionnaireScore")
 
 ## Initiate variable i to represent row numbers for each iteration, starting with 1
 i = 1
