@@ -1,50 +1,18 @@
-#### Question 2: Set-up, packages, & reading in data ---------------------------
-
-dir.create("data_cleaning")
-dir.create("data_cleaning/output")
-dir.create("data_cleaning/scripts")
-dir.create("data_cleaning/data")
-
-setwd("~/Desktop/psy1903/stats/data_cleaning/scripts/")
+#### Load Packages & Set Working Directory ------
 
 if (!require("pacman")) {install.packages("pacman"); require("pacman")}
 
-p_load("tidyverse","rstudioapi","lme4","emmeans","psych","corrplot", "jsonlite")
+p_load("tidyverse","rstudioapi","lme4","emmeans","psych","corrplot","jsonlite")
 
-iat_data1 <- read.csv("~/Desktop/psy1903/osfstorage-archive/eco-emotions-2024-11-05-21-43-06.csv", header = TRUE, na.strings = "NA")
+setwd("~/Desktop/psy1903/stats/final_stats")
 
-str(iat_data1)
-summary(iat_data1)
-
-#### Question 3: Subsetting data -----------------------------------------------
-
-iat_data2 <- iat_data1[iat_data1$expectedCategoryAsDisplayed %in% c("nature or anxiety", "nature or serenity", "school or anxiety", "school or serenity"), c("trial_index", "rt", "response", "word", "expectedCategory", "expectedCategoryAsDisplayed", "leftCategory", "rightCategory", "correct")]
-
-iat_data2$rt <- round(as.numeric(iat_data2$rt), 0) # converting rt from chr to int/num
-
-# Converting some columns to factors via a for loop
-factorList <- c("expectedCategory", "expectedCategoryAsDisplayed", "leftCategory", "rightCategory")
-
-for (factorCategory in factorList) {
-  iat_data2[, factorCategory] <- as.factor(iat_data2[, factorCategory])
-}
-
-str(iat_data2)
-summary(iat_data2)
-
-#### [USE] Creating a function -------------------------------------------------
-
-# Practice: read in data
-data <- read.csv("~/Desktop/psy1903/osfstorage-archive/eco-emotions-2024-11-05-21-43-21.csv", header = TRUE, na.strings = "NA")
-
-data$rt <- round(as.numeric(data$rt), 0)
+#### D-score Function --------------------------------
 
 # Step 1: Specify your function with one argument, data
 calculate_IAT_dscore <- function(data) {
   
   # Step 2: Only select trials with rt > 300 & < 5000 and filter correct trials (subset full data frame into new data frame called tmp)
-  tmp <- data[data$rt > 300 & data$rt < 5000, ]
-  tmp <- tmp[tmp$correct == TRUE, ]
+  tmp <- data[data$rt > 300 & data$rt < 5000 & data$correct == TRUE, ]
   
   # Step 3: Separate congruent and incongruent trials (subset tmp into two new data frames: congruent_trials and incongruent_trials)
   congruent_trials <- tmp[tmp$expectedCategoryAsDisplayed == "nature or serenity" | tmp$expectedCategoryAsDisplayed == "school or anxiety", ]
@@ -64,7 +32,7 @@ calculate_IAT_dscore <- function(data) {
   return(d_score)
 }
 
-#### [USE] Questionnaire Scoring Function --------------------------------------
+#### Questionnaire Scoring Function ---------------
 
 ## Initiate function called score_questionnaire that accepts a single argument called `data`. Within this function...
 score_questionnaire <- function(data) {
@@ -80,14 +48,14 @@ score_questionnaire <- function(data) {
   ## Convert to numeric
   questionnaire <- as.data.frame(lapply(questionnaire, as.numeric))
   
-  ## No reverse-scoring because unnecessary
+  ## No reverse-scoring
   
   ## Calculate & return questionnaire score (mean)
   score <- rowMeans(questionnaire, na.rm = TRUE)
   return(score)
 }
 
-#### [USE] Putting it in a loop & creating new files ---------------------------
+#### For Loop ------------------------------------------
 
 ## Set a variable called directory_path with the path to the location of your data csv files. This directory should *only* contain your raw participant csv data files and no other files.
 directory_path <- "~/Desktop/psy1903/osfstorage-archive"
@@ -109,7 +77,7 @@ for (file_list in files_list) {
   
   # Use read.csv to read in your file as a temporary data frame
   tmp <- read.csv(file_list)
-
+  
   # Convert 'rt' from character to numeric and round it
   tmp$rt <- round(as.numeric(tmp$rt), 0)
   
@@ -163,51 +131,28 @@ dScores$participant_ID <- as.character(dScores$participant_ID)
 ## Outside of the for loop, save the new dScores data frame using write.csv() into your data_cleaning/data subdirectory:
 write.csv(dScores,"~/Desktop/psy1903/stats/data_cleaning/data/participant_dScores.csv", row.names = FALSE)
 
-#### Practice Questionnaire Scoring -----------------------------------------------------
+#### ANOVA -------------------------------------------
 
-## Read in data file to a data frame called iat_test
-iat_test <- read.csv("~/Desktop/psy1903/stats/data_cleaning/data/my-iat-test-data.csv")
-
-## Extract questionnaire data
-json_data <- iat_test[iat_test$trialType == "Questionnaire", "response"]
-
-## Use fromJSON to Convert from JSON to data frame
-questionnaire <- fromJSON(json_data)
-questionnaire <- as.data.frame(questionnaire)
-str(questionnaire)
-
-## Convert to numeric
-questionnaire <- as.data.frame(lapply(questionnaire, as.numeric))
-
-## Reverse score if necessary (not for me but writing code here for learning/future reference)
-# rev_items <- c("question1", "question3", "whatever")
-# for (rev_item in rev_items) {
-  # questionnaire[, rev_item] <- (maxLikertScore + minLikertScale) - questionnaire[, rev_item]
-# }
-
-## Calculate mean or sum score
-score <- rowMeans(questionnaire, na.rm = TRUE)
-
-#### [USE] Data visualizations ---------------------------
-
-## ANOVA
 anova <- aov(d_score ~ whichPrime, data = dScores)
 summary(anova)
 
-## T-tests
+#### T-Test ---------------------------------------------
+
 TukeyHSD(anova)
 
-## Correlation
+#### Correlation ---------------------------------------
+
 cor.test(dScores$d_score, dScores$questionnaire)
 
-## Base R histogram
+#### Base R Histogram -------------------------------
+
 hist(dScores$d_score,
      main = "Distribution of D-Scores",
      xlab = "D-Scores",
      ylab = "Frequency")
 
-## GGPlot histogram
-# Version 1
+#### ggplot Histogram --------------------------------
+
 ggplot(dScores, aes(x = d_score)) +
   geom_histogram(binwidth = 0.1, 
                  color = "black", 
@@ -217,7 +162,8 @@ ggplot(dScores, aes(x = d_score)) +
        y = "Frequency") +
   theme_minimal()
 
-# Version 2
+#### ggplot Histogram by Prime ---------------------
+
 ggplot(dScores, aes(x = d_score)) +
   geom_histogram(binwidth = 0.1,
                  color = "black",
@@ -228,7 +174,8 @@ ggplot(dScores, aes(x = d_score)) +
   green_theme() +
   facet_wrap(~whichPrime)
 
-## Boxplot
+#### ggplot Box Plot ----------------------------------
+
 ggplot(dScores, aes(x = whichPrime, y = d_score, fill = whichPrime)) +
   geom_boxplot() +
   labs(title = "Effect of Prime on D-Scores",
@@ -240,7 +187,8 @@ ggplot(dScores, aes(x = whichPrime, y = d_score, fill = whichPrime)) +
                               "climate-anxiety" = "Climate Anxiety",
                               "school-anxiety" = "School Anxiety"))
 
-## Scatterplot
+#### ggplot Scatter Plot -------------------------------
+
 ggplot(dScores, aes(x = questionnaire, y = d_score)) +
   geom_point() +
   geom_smooth(method = "lm") +
@@ -249,20 +197,21 @@ ggplot(dScores, aes(x = questionnaire, y = d_score)) +
        y = "D-Scores") +
   theme_classic()
 
-## Create personal theme
+#### ggplot Custom Theme ---------------------------
+
 green_theme <- function() {
   theme_minimal() %+replace%
-  theme(
-    text = element_text(family = "Helvetica"), # font family
-    
-    # Panel borders and background
-    panel.border = element_rect(colour = "#5d7843", fill = NA, linetype = 2),
-    panel.background = element_rect(fill = "#e4ebdd"),
-    
-    # Title and axis label customization
-    plot.title = element_text(size = 14, face = "bold", hjust = 0.5, vjust = 2, family = "Helvetica"),
-    axis.title = element_text(size = 12, family = "Helvetica"),
-    axis.text = element_text(size = 10, family = "Helvetica", color = "#3b4d36"),
-    axis.ticks = element_line(color = "#3b4d36", linewidth = 0.5),
-  )
+    theme(
+      text = element_text(family = "Helvetica"), # font family
+      
+      # Panel borders and background
+      panel.border = element_rect(colour = "#5d7843", fill = NA, linetype = 2),
+      panel.background = element_rect(fill = "#e4ebdd"),
+      
+      # Title and axis label customization
+      plot.title = element_text(size = 14, face = "bold", hjust = 0.5, vjust = 2, family = "Helvetica"),
+      axis.title = element_text(size = 12, family = "Helvetica"),
+      axis.text = element_text(size = 10, family = "Helvetica", color = "#3b4d36"),
+      axis.ticks = element_line(color = "#3b4d36", linewidth = 0.5),
+    )
 }
