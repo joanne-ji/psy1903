@@ -67,7 +67,7 @@ files_list <- list.files(path = directory_path, pattern = "\\.csv$", full.names 
 dScores <- data.frame(matrix(nrow = length(files_list), ncol = 4))
 
 ## Rename the default column names to something meaningful
-colnames(dScores) <- c("participant_ID", "d_score", "whichPrime", "questionnaireScore")
+colnames(dScores) <- c("participant_ID", "d_score", "whichPrime", "questionnaire")
 
 ## Initiate variable i to represent row numbers for each iteration, starting with 1
 i = 1
@@ -192,8 +192,8 @@ ggplot(dScores, aes(x = whichPrime, y = d_score, fill = whichPrime)) +
 ggplot(dScores, aes(x = questionnaire, y = d_score)) +
   geom_point() +
   geom_smooth(method = "lm") +
-  labs(title = "Correlation Between Questionnaire and D-Scores",
-       x = "Questionnaire",
+  labs(title = "Correlation Between Questionnaire Scores and D-Scores",
+       x = "Questionnaire Scores",
        y = "D-Scores") +
   theme_classic()
 
