@@ -146,6 +146,9 @@ cor.test(dScores$d_score, dScores$questionnaire)
 
 #### Base R Histogram -------------------------------
 
+summary(dScores$d_score)
+sd(dScores$d_score, na.rm = TRUE)
+
 hist(dScores$d_score,
      main = "Distribution of D-Scores",
      xlab = "D-Scores",
@@ -171,7 +174,7 @@ ggplot(dScores, aes(x = d_score)) +
   labs(title = "Distribution of D-Scores by Prime",
        x = "D-Scores",
        y = "Frequency") +
-  green_theme() +
+  ugly_theme() +
   facet_wrap(~whichPrime)
 
 #### ggplot Box Plot ----------------------------------
@@ -188,6 +191,9 @@ ggplot(dScores, aes(x = whichPrime, y = d_score, fill = whichPrime)) +
                               "school-anxiety" = "School Anxiety"))
 
 #### ggplot Scatter Plot -------------------------------
+
+summary(dScores$questionnaire)
+sd(dScores$questionnaire)
 
 ggplot(dScores, aes(x = questionnaire, y = d_score)) +
   geom_point() +
@@ -213,5 +219,25 @@ green_theme <- function() {
       axis.title = element_text(size = 12, family = "Helvetica"),
       axis.text = element_text(size = 10, family = "Helvetica", color = "#3b4d36"),
       axis.ticks = element_line(color = "#3b4d36", linewidth = 0.5),
+    )
+}
+
+ugly_theme <- function() {
+  theme_minimal() %+replace%
+    theme(
+      # Readable but still loud font family and size
+      text = element_text(family = "Comic Sans MS", size = 12, color = "hotpink"), 
+      
+      # Clashing panel borders and background
+      panel.border = element_rect(colour = "limegreen", fill = NA, linetype = 1),
+      panel.background = element_rect(fill = "magenta"),
+      
+      # Garish title and axis label customization with readable sizes
+      plot.title = element_text(size = 16, face = "italic", hjust = -0.2, family = "Papyrus", color = "orange"),
+      axis.title = element_text(size = 14, family = "Papyrus", color = "purple"),
+      axis.text = element_text(size = 12, family = "Courier New", color = "cyan"),
+      
+      # Overwhelming axis ticks
+      axis.ticks = element_line(color = "red", linewidth = 1, linetype = "dotted")
     )
 }
